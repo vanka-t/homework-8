@@ -6,6 +6,7 @@ var pixelFont;
 var cnv;
 var buttonYes, buttonNo, buttonGuess;
 var bx, by, xOffset, yOffset, overButton, locked, overButton2, locked2, buttonSize; //adjustments for mousePressed for buttonYes/No
+var score = 0;
 
 function preload(){
   //img = loadImage("images/cleanboi.jpg");
@@ -20,8 +21,7 @@ function setup() {
   cnv = createCanvas(1280, 1000);
  // cnv.mouseClicked();
   
-  //img.resize(width,height);
-  let constraints = {
+  let constraints = { //video settings and resize for the detector to fit at wanted location
     video: {
       mandatory: {
         minWidth: width,
@@ -34,10 +34,8 @@ function setup() {
   };
   myVid = createCapture(constraints, videoLoaded);
 
-  //myVid = createCapture(VIDEO, videoLoaded);
   
-  //detector.detect(img, objectCallback);
-  //image(img,0,0);
+
   
 }
 
@@ -53,7 +51,6 @@ function draw() {
   background(0);
   
   textFont(pixelFont);
-  textSize(50);
   textAlign(CENTER);
 
   buttonSize = 100;
@@ -96,6 +93,7 @@ function draw() {
     imageMode(CENTER);
     image(myVid,width/2,height/2);
 
+    //RESULTS DISPLAY
   for (var i=0;i<objectResults.length;i++){
     var obj = objectResults[i];
     noFill();
@@ -103,20 +101,29 @@ function draw() {
     strokeWeight(3);
     rect(obj.x, obj.y, obj.width, obj.height);
     
-    text(obj.label, obj.x, obj.y-30);
-
-    
-    //if (i === 1) { //results
-    fill(255);
-    rect(200,10, width- 200, 90);
-    noFill();
+    textSize(50);
     var y = 50;
-      text("this must be a: " +  objectResults[0].label , width/2, y);
-      // } else { 
-      // text(`this must be either of these: ${objectResults[0].label}, ${objectResults[1].label}` , width/2, 100);
-      // }
     text("i am "+ round(obj.confidence * 100) + "% confident on this one!", width/2, y+50);
     text("Did I guess right?",width/2,height-50);
+
+    
+    if (i >= 1) { //results
+    fill(255);
+    rect(200,10, width-420, 90);
+    //console.log(width/2 - 200);
+    noFill();
+    
+      text("this must be a: " +  objectResults[0].label , width/2, y);
+      console.log(objectResults);
+       } else { 
+       //  console.log("ur mom");
+      // text(`this must be either of these: ${objectResults[0].label}, ${objectResults[1].label}` , width/2, 100);
+       }
+    
+    
+    
+    
+
     buttonYes.resize(buttonSize,buttonSize);
     buttonNo.resize(buttonSize,buttonSize);
 
@@ -128,6 +135,11 @@ function draw() {
     image(buttonYes, bx,by);
     image(buttonNo, width-bx,by);
     fill(255);
+    textSize(20);
+    stroke(255,0,0);
+    text(obj.label, obj.x, obj.y-30);
+    text("Score: " + score,width/2,height-100);
+      
 
     
     imageMode(CENTER);
@@ -141,7 +153,8 @@ function draw() {
 function mousePressed() {
   if (overButton) {
     locked = true;
-    console.log("ur soooo cooool");
+    score ++;
+    
   } else {
     locked = false;
   }
