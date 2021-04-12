@@ -5,7 +5,7 @@ var objectResults = [];
 var pixelFont;
 var cnv;
 var buttonYes, buttonNo, buttonGuess;
-var bx, by, xOffset, yOffset, overButton, locked, buttonSize; //adjustments for mousePressed for buttonYes
+var bx, by, xOffset, yOffset, overButton, locked, overButton2, locked2, buttonSize; //adjustments for mousePressed for buttonYes/No
 
 function preload(){
   //img = loadImage("images/cleanboi.jpg");
@@ -55,15 +55,17 @@ function draw() {
   textFont(pixelFont);
   textSize(50);
   textAlign(CENTER);
-buttonSize = 100;
+
+  buttonSize = 100;
+//buttonYES
   if ( //inspired by p5 examples
-    mouseX > bx - buttonSize &&
+    mouseX > bx - buttonSize && //syncing mouse with button settings
     mouseX < bx + buttonSize &&
     mouseY > by - buttonSize &&
     mouseY < by + buttonSize
   ) {
     overButton = true;
-    if (!locked) {
+    if (!locked) { //if mouse scrolls past buttons, WHITE CIRCLES show up in back
       ellipseMode(CENTER);
       fill(255);
       ellipse(bx,by,buttonSize+10,buttonSize+10);
@@ -72,17 +74,28 @@ buttonSize = 100;
     //console.log("ur the 2nd best")
     overButton = false;
   }
-    // if (mouseIsPressed){
-    //   image(myVid,0,0);
-    // } else {
-    //   return false;
-    // }
 
-  //function mouseClicked(){
+//buttonNO
+  if ( 
+    mouseX > width-bx - buttonSize && 
+    mouseX < width-bx + buttonSize &&
+    mouseY > by - buttonSize &&
+    mouseY < by + buttonSize
+  ) {
+    overButton2 = true;
+    if (!locked2) { //if mouse scrolls past buttons, WHITE CIRCLES show up in back
+      ellipseMode(CENTER);
+      fill(255);
+      ellipse(width-bx,by,buttonSize+10,buttonSize+10);
+    }
+  } else {
+    //console.log("ur the 2nd best")
+    overButton2 = false;
+  }
+
     imageMode(CENTER);
     image(myVid,width/2,height/2);
-  //} 
-  //function mainPage() {
+
   for (var i=0;i<objectResults.length;i++){
     var obj = objectResults[i];
     noFill();
@@ -105,14 +118,15 @@ buttonSize = 100;
     text("i am "+ round(obj.confidence * 100) + "% confident on this one!", width/2, y+50);
     text("Did I guess right?",width/2,height-50);
     buttonYes.resize(buttonSize,buttonSize);
+    buttonNo.resize(buttonSize,buttonSize);
 
-    //BUTTONYES SETTINGS
+    //BUTTONYES && BUTTONNO SETTINGS
     bx = width/4;
     by = height-50;
     xOffset = 0.0;
     yOffset = 0.0;
     image(buttonYes, bx,by);
-    //image(buttonNo, width-bx,by);
+    image(buttonNo, width-bx,by);
     fill(255);
 
     
@@ -134,12 +148,26 @@ function mousePressed() {
   console.log("ur soooo cooool2");
   xOffset = mouseX - bx;
   yOffset = mouseY - by;
-}
-function mouseReleased() {
+
+
+if (overButton2) {
+  locked2 = true;
+  console.log("ur soooo cooool!!");
+} else {
   locked = false;
 }
+console.log("ur soooo cooool22");
+xOffset = mouseX - bx;
+yOffset = mouseY - by;
 
-function startPage(){
+}
+
+function mouseReleased() {
+  locked = false;
+  locked2 = false;
+}
+
+function startPage(){ //***if you have time, start page before game runs***
   fill(0);
   rect(0,0,width,height);
  }
