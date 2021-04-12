@@ -3,6 +3,7 @@ var detector;
 var myVid;
 var objectResults = [];
 var pixelFont;
+var cnv;
 
 function preload(){
   //img = loadImage("images/cleanboi.jpg");
@@ -12,8 +13,8 @@ function preload(){
 
 function setup() {
   
-  createCanvas(1280, 720);
-  
+  cnv = createCanvas(1280, 720);
+ // cnv.mouseClicked();
   
   //img.resize(width,height);
   let constraints = {
@@ -39,12 +40,26 @@ function videoLoaded(){
   detector.detect(myVid, objectCallback);
 }
 
+
+
 function draw() {
   background(0);
-  image(myVid,0,0);
+  
   textFont(pixelFont);
   textSize(50);
   textAlign(CENTER);
+
+  
+    // if (mouseIsPressed){
+    //   image(myVid,0,0);
+    // } else {
+    //   return false;
+    // }
+
+  //function mouseClicked(){
+    image(myVid,0,0);
+  //} 
+  //function mainPage() {
   for (var i=0;i<objectResults.length;i++){
     var obj = objectResults[i];
     noFill();
@@ -58,13 +73,23 @@ function draw() {
     if (i === 1) {
       text("this must be a: " +  obj.label, width/2, 100);
       } else { 
-      text("this must be either of these: " +  obj.label , width/2, 100);
+      text(`this must be either of these: ${objectResults[0].label}, ${objectResults[1].label}` , width/2, 100);
       }
     text("i am "+ round(obj.confidence * 100) + "% confident on this one!", width/2, height-20);
-
-  }
- 
+    
+ //}
 }
+ 
+
+
+  
+  
+}
+
+function startPage(){
+  fill(0);
+  rect(0,0,width,height);
+ }
 
 function objectCallback(error, results) { //ml5 callbacks is always error first(!!)
   if (error) {
