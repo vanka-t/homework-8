@@ -2,22 +2,35 @@ var img;
 var detector;
 var myVid;
 var objectResults = [];
+var pixelFont;
 
 function preload(){
   //img = loadImage("images/cleanboi.jpg");
+  pixelFont = loadFont("assets/font2.ttf");
   detector = ml5.objectDetector("cocossd");
 }
 
 function setup() {
   
-  createCanvas(1000, 800);
+  createCanvas(1280, 720);
   
   
   //img.resize(width,height);
-  myVid = createCapture(VIDEO, videoLoaded);
+  let constraints = {
+    video: {
+      mandatory: {
+        minWidth: width,
+        minHeight: height
+      },
+    },
+  };
+  myVid = createCapture(constraints, videoLoaded);
+
+  //myVid = createCapture(VIDEO, videoLoaded);
   
   //detector.detect(img, objectCallback);
   //image(img,0,0);
+  
 }
 
 function videoLoaded(){
@@ -27,15 +40,26 @@ function videoLoaded(){
 }
 
 function draw() {
+  background(0);
   image(myVid,0,0);
+  textFont(pixelFont);
+  textSize(50);
   for (var i=0;i<objectResults.length;i++){
     var obj = objectResults[i];
     noFill();
     stroke(0,0,255);
     strokeWeight(3);
     rect(obj.x, obj.y, obj.width, obj.height);
-    textSize(20);
+    
     text(obj.label, obj.x+30, obj.y-30);
+
+    //results
+    if (i == 1) {
+      text("this must be a: " +  obj.label, width/2, 50);
+      } else { 
+      text("this must be either of these: " +  obj.label, width/2, 50);
+      }
+      text("i am "+ round(obj.confidence * 100) + "% confident on this one!", width/2, height-150);
 
   }
  
@@ -43,7 +67,7 @@ function draw() {
 
 function objectCallback(error, results) { //ml5 callbacks is always error first(!!)
   if (error) {
-    console.error(error);
+    console.log(error);
   } else{
    // console.log(results);
     objectResults = results;

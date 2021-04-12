@@ -5,5 +5,5 @@ html, body {
 
 canvas {
   display: block;
-  padding: 30;
+  padding: 30px 50px;
 }
