@@ -44,6 +44,7 @@ function draw() {
   image(myVid,0,0);
   textFont(pixelFont);
   textSize(50);
+  textAlign(CENTER);
   for (var i=0;i<objectResults.length;i++){
     var obj = objectResults[i];
     noFill();
@@ -51,15 +52,15 @@ function draw() {
     strokeWeight(3);
     rect(obj.x, obj.y, obj.width, obj.height);
     
-    text(obj.label, obj.x+30, obj.y-30);
+    text(obj.label, obj.x, obj.y-30);
 
     //results
-    if (i == 1) {
-      text("this must be a: " +  obj.label, width/2, 50);
+    if (i === 1) {
+      text("this must be a: " +  obj.label, width/2, 100);
       } else { 
-      text("this must be either of these: " +  obj.label, width/2, 50);
+      text("this must be either of these: " +  obj.label , width/2, 100);
       }
-      text("i am "+ round(obj.confidence * 100) + "% confident on this one!", width/2, height-150);
+    text("i am "+ round(obj.confidence * 100) + "% confident on this one!", width/2, height-20);
 
   }
  
